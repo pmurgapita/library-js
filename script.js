@@ -1,7 +1,5 @@
 const myLibrary = [];
 
-
-
 function Book (title, author, pages, read) {
     if (!new.target) {
     throw Error("You must use the 'new' operator to call the constructor");
@@ -25,10 +23,6 @@ function addToLibrary(title, author, pages, read) {
     myLibrary.push(book);
 }
 
-const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, false);
-console.log(theHobbit.info());
-console.log(theHobbit.id);
-
 addToLibrary("The Hobbit", "J.R.R. Tolkien", 295, false)
 addToLibrary("The Old Man and the Sea", "Ernest Hemingway", 112, true)
 addToLibrary("Narnia", "C.S. Lewis", 816, false)
@@ -43,6 +37,10 @@ console.log(myLibrary);
 const cardContainer = document.querySelector(".cards");
 
 myLibrary.forEach((element) => {
+    createCard(element);
+})
+
+function createCard(element) {
     const card = document.createElement("div");
     card.classList = "card";
     const name = document.createElement("p");
@@ -53,14 +51,19 @@ myLibrary.forEach((element) => {
     const pagesPrint = document.createElement("span");
     const read = document.createElement("p");
     const readPrint = document.createElement("span");
+    const buttonDiv = document.createElement("div")
     const removeButton = document.createElement("button");
+    const readButton = document.createElement("button");
     removeButton.classList = "remove";
+    readButton.classList = "read"
     cardContainer.appendChild(card);
     card.appendChild(name);
     card.appendChild(author);
     card.appendChild(pages);
     card.appendChild(read);
-    card.appendChild(removeButton);
+    card.appendChild(buttonDiv)
+    buttonDiv.appendChild(removeButton);
+    buttonDiv.appendChild(readButton);
     name.textContent = `Title: `;
     name.appendChild(namePrint)
     namePrint.textContent = element.title;
@@ -73,8 +76,9 @@ myLibrary.forEach((element) => {
     read.textContent = "Read: ";
     read.appendChild(readPrint);
     readPrint.textContent = element.read === true ? "Yes" : "No";
-    removeButton.textContent = "Remove"
-})
+    removeButton.textContent = "Remove";
+    readButton.textContent = readPrint.textContent === "Yes" ? "Unread" : "Read";
+}
 
 const newBook = document.querySelector(".add");
 const dialog = document.querySelector("dialog");
@@ -94,13 +98,11 @@ const subName = document.querySelector("#title")
 const subAuthor = document.querySelector("#author")
 const subPages = document.querySelector("#pages")
 const subRead = document.querySelector("#read")
-console.log(subName.value)
-console.log(subRead.checked)
 
 
 submit.addEventListener("click", (event) => {
-    console.log(subName.value)
-    console.log(subRead.checked)
-    addToLibrary(subName.value, subAuthor.value, subPages.value, subRead.checked);
     event.preventDefault();
+    addToLibrary(subName.value, subAuthor.value, subPages.value, subRead.checked);
+    createCard(myLibrary[myLibrary.length-1])
+    closeButton.parentElement.close();
 })
