@@ -18,6 +18,10 @@ function Book (title, author, pages, read) {
     }
 }
 
+Book.prototype.toggleRead = function () {
+    this.read = this.read === "Yes" ? "No" : "Yes";
+}
+
 function addToLibrary(title, author, pages, read) {
     const book = new Book(title,author,pages,read);
     myLibrary.push(book);
@@ -43,6 +47,7 @@ myLibrary.forEach((element) => {
 function createCard(element) {
     const card = document.createElement("div");
     card.classList = "card";
+    card.dataset.id = element.id;
     const name = document.createElement("p");
     const namePrint = document.createElement("span");
     const author = document.createElement("p");
@@ -51,19 +56,21 @@ function createCard(element) {
     const pagesPrint = document.createElement("span");
     const read = document.createElement("p");
     const readPrint = document.createElement("span");
-    const buttonDiv = document.createElement("div")
+    readPrint.classList = "readPrint";
     const removeButton = document.createElement("button");
     const readButton = document.createElement("button");
     removeButton.classList = "remove";
-    readButton.classList = "read"
+    readButton.classList = "read";
+    readButton.dataset.id = element.id;
+    removeButton.dataset.id = element.id;
+    console.log(removeButton.dataset.id);
     cardContainer.appendChild(card);
     card.appendChild(name);
     card.appendChild(author);
     card.appendChild(pages);
     card.appendChild(read);
-    card.appendChild(buttonDiv)
-    buttonDiv.appendChild(removeButton);
-    buttonDiv.appendChild(readButton);
+    card.appendChild(removeButton);
+    card.appendChild(readButton);
     name.textContent = `Title: `;
     name.appendChild(namePrint)
     namePrint.textContent = element.title;
@@ -105,4 +112,43 @@ submit.addEventListener("click", (event) => {
     addToLibrary(subName.value, subAuthor.value, subPages.value, subRead.checked);
     createCard(myLibrary[myLibrary.length-1])
     closeButton.parentElement.close();
+})
+
+const removeButtonArray = document.querySelectorAll(".remove");
+
+removeButtonArray.forEach((removeButton) => {
+    removeButton.addEventListener("click", () => {
+        const removeId = removeButton.dataset.id;
+        myLibrary.forEach((element) => {
+            if (element.id === removeId) {
+                const elementIndex = myLibrary.indexOf(element);
+                console.log(elementIndex)
+                console.log(myLibrary)
+                myLibrary.splice(elementIndex, 1);
+                console.log(myLibrary);
+                const removeCardArray = document.querySelectorAll(".card");
+                removeCardArray.forEach((card) => {
+                    if (card.dataset.id === element.id) {
+                        const removeCard = card;
+                        removeCard.remove();
+                    }
+                })
+            }
+        })
+    })
+})
+
+const readButtonArray = document.querySelectorAll(".read");
+readButtonArray.forEach((readButton) => {
+    readButton.addEventListener("click", () => {
+        myLibrary.forEach((element) => {
+            if (readButton.dataset.id === element.id) {
+                element.toggleRead();
+                const readPrint = document.querySelector(".readPrint");
+                readPrint.textContent = readPrint.textContent === "Yes" ? "No" : "Yes";
+                console.log(element.read);
+                console.log(myLibrary);
+            } 
+        })
+    })
 })

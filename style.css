@@ -46,6 +46,7 @@ body {
     position: relative;
     box-shadow: 1px 1px 2px 1px rgb(64, 64, 64);
     min-height: 160px;
+    min-width: 200px;
 }
 
 .card p {
@@ -67,13 +68,11 @@ button {
     bottom: 10px;
 }
 
-.read {
+.card .read {
     position: absolute;
     left: 10px;
     bottom: 10px;
 }
-
-
 
 span {
     color:white;
