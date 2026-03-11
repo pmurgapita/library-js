@@ -57,6 +57,7 @@ function createCard(element) {
     const read = document.createElement("p");
     const readPrint = document.createElement("span");
     readPrint.classList = "readPrint";
+    readPrint.dataset.id = element.id;
     const removeButton = document.createElement("button");
     const readButton = document.createElement("button");
     removeButton.classList = "remove";
@@ -114,12 +115,10 @@ submit.addEventListener("click", (event) => {
     closeButton.parentElement.close();
 })
 
-const removeButtonArray = document.querySelectorAll(".remove");
-
-removeButtonArray.forEach((removeButton) => {
-    removeButton.addEventListener("click", () => {
-        const removeId = removeButton.dataset.id;
-        myLibrary.forEach((element) => {
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.classList.contains('remove')) {
+    const removeId = e.target.dataset.id;
+    myLibrary.forEach((element) => {
             if (element.id === removeId) {
                 const elementIndex = myLibrary.indexOf(element);
                 console.log(elementIndex)
@@ -135,20 +134,31 @@ removeButtonArray.forEach((removeButton) => {
                 })
             }
         })
-    })
+  }
 })
 
-const readButtonArray = document.querySelectorAll(".read");
-readButtonArray.forEach((readButton) => {
-    readButton.addEventListener("click", () => {
+
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('read')) {
         myLibrary.forEach((element) => {
-            if (readButton.dataset.id === element.id) {
+            if (e.target.dataset.id === element.id) {
                 element.toggleRead();
-                const readPrint = document.querySelector(".readPrint");
-                readPrint.textContent = readPrint.textContent === "Yes" ? "No" : "Yes";
                 console.log(element.read);
                 console.log(myLibrary);
+                const toggleReadCard = document.querySelectorAll(".readPrint");
+                toggleReadCard.forEach((readPrint) => {
+                    if (readPrint.dataset.id === element.id) {
+                        readPrint.textContent = readPrint.textContent === "Yes" ? "No" : "Yes";
+                    }
+                const toggleReadButton = document.querySelectorAll(".read");
+                toggleReadButton.forEach((readTextButton) => {
+                    if (readTextButton.dataset.id === element.id) {
+                        readTextButton.textContent = readTextButton.textContent === "Read" ? "Unread" : "Read";
+                    }
+                })
+                })
             } 
         })
-    })
+    }
 })
+
